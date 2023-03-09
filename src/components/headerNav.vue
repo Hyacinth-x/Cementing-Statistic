@@ -2,37 +2,33 @@
 * 左边菜单
 */ 
 <template>
-    <el-menu  :collapse="isCollapse"
-    style="min-height: 100%;overflow: hidden;" 
-    :collapse-transition="false" 
-    router 
-    :default-active="$route.path"
-    unique-opened 
-    background-color="#333399" 
-    text-color="#fff"
-    active-text-color="#ffd04b">
+    <div class="nav">
+        <span class="span1">固井信息统计</span>
 
-        <div class="logobox">
-            <img src='../assets/images/log.png' style="height: 40px; margin: 5px auto;" />
+        <el-menu  router background-color="#1989fa" text-color="#fff"
+            :default-active="$route.path" unique-opened  mode="horizontal">
+            <el-submenu v-for="menu in allmenu" :key="menu.menuid" :index="menu.menuname">
+                <template slot="title">
+                    <span>{{ menu.menuname }}</span>
+                </template>
+                <el-menu-item-group>
+                    <el-menu-item v-for="chmenu in menu.menus" :index="'/' + chmenu.url" :key="chmenu.menuid">
+                        <span>{{ chmenu.menuname }}</span>
+                    </el-menu-item>
+                </el-menu-item-group>
+            </el-submenu>
+        </el-menu>
+
+        <div>
+            <span class="span2">超级管理员 |</span>
+            <span class="span2">个人中心 |</span>
+            <span class="span2">退出登录 |</span>
         </div>
-
-        <el-submenu v-for="menu in allmenu" :key="menu.menuid" :index="menu.menuname">
-            <template slot="title">
-                <i class="iconfont" :class="menu.icon"></i>
-                <span>{{ menu.menuname }}</span>
-            </template>
-            <el-menu-item-group>
-                <el-menu-item v-for="chmenu in menu.menus" :index="'/' + chmenu.url" :key="chmenu.menuid">
-                    <i class="iconfont" :class="chmenu.icon"></i>
-                    <span>{{ chmenu.menuname }}</span>
-                </el-menu-item>
-            </el-menu-item-group>
-        </el-submenu>
-    </el-menu>
+    </div>
 </template>
 <script>
 export default {
-    name: 'Leftnav',
+    name: 'headerNav',
     data() {
         return {
             allmenu: [
@@ -87,25 +83,25 @@ export default {
                         {
                             menuid: 21,
                             icon: '',
-                            menuname: '建井基础数据统计',
+                            menuname: '建井基础数据',
                             hasThird: 'N',
-                            url: 'index/acquisition/Basic',
+                            url: '',
                             menus: null
                         },
                         {
                             menuid: 22,
                             icon: '',
-                            menuname: '过程数据统计',
+                            menuname: '过程数据',
                             hasThird: 'N',
-                            url: 'index/acquisition/Process',
+                            url: '',
                             menus: null
                         },
                         {
                             menuid: 23,
                             icon: '',
-                            menuname: '实验检测数据统计',
+                            menuname: '实验检测数据',
                             hasThird: 'N',
-                            url: 'index/acquisition/Experiments',
+                            url: '',
                             menus: null
                         }
                     ]
@@ -211,34 +207,37 @@ export default {
                 }
             ]
         }
-    },
-    props: {
-        isCollapse: Boolean,
-    },
+    }
 }
 </script>
+
 <style scoped>
-.logobox {
-    height: 40px;
-    line-height: 40px;
-    color: #9d9d9d;
-    font-size: 20px;
-    text-align: center;
+.nav{
+    display: flex;
+    justify-content:space-between;
+    background-color: #1989fa; 
+    width: 100%;
+}
+.el-menu--horizontal>.el-submenu .el-submenu__icon-arrow{
+    color: #fff;
 }
 
-.iconfont {
-    padding-right: 5px;
-    font-size: 20px;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+span{
+    color: #fff;
 }
-
-.el-menu-item-group__title {
-    padding: 0px;
+.span1{
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    font-size: 25px;
+    font-weight: bolder;
+    margin-left: 20px;
 }
-
-.el-menu {
-    border: none;
+.span2{
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    font-size: 13px;
+    margin-right: 10px;
 }
 </style>

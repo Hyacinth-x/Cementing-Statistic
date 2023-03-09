@@ -1,15 +1,25 @@
 <template>
 <div>
     <h2 style="text-align: center;">个人中心</h2>
+
     <el-descriptions title="用户信息" border>
-        <el-descriptions-item label="用户名">kooriookami</el-descriptions-item>
-        <el-descriptions-item label="手机号">18100000000</el-descriptions-item>
-        <el-descriptions-item label="居住地">苏州市</el-descriptions-item>
-        <el-descriptions-item label="备注">
-            <el-tag size="small">学校</el-tag>
+        <el-descriptions-item label="用户名">{{this.personalInformation.username}}</el-descriptions-item>
+        <el-descriptions-item label="邮箱">{{this.personalInformation.email}}</el-descriptions-item>
+        <el-descriptions-item label="手机号">{{this.personalInformation.mobile}}</el-descriptions-item>
+        <el-descriptions-item label="昵称">{{this.personalInformation.nickname}}</el-descriptions-item>
+        <el-descriptions-item label="联系电话">{{ this.personalInformation.phone }}</el-descriptions-item>
+        <el-descriptions-item label="街道地址">{{ this.personalInformation.address }}</el-descriptions-item>
+        <el-descriptions-item label="个人简介">{{ this.personalInformation.profile }}</el-descriptions-item>
+        <el-descriptions-item label="角色ID">roleId</el-descriptions-item>
+        <el-descriptions-item label="所属机构ID">orgId</el-descriptions-item>
+        <el-descriptions-item label="状态">
+            <el-tag size="small">{{ getStatus(this.personalInformation.status) }}</el-tag>
         </el-descriptions-item>
-        <el-descriptions-item label="联系地址">江苏省苏州市吴中区吴中大道 1188 号</el-descriptions-item>
+        <el-descriptions-item label="创建时间">{{ this.$moment(this.personalInformation.createTime).format('YYYY-MM-DD') }}</el-descriptions-item>
+        <el-descriptions-item label="修改时间">{{ this.$moment(this.personalInformation.updateTime).format('YYYY-MM-DD') }}</el-descriptions-item>
+
     </el-descriptions>
+    
     <el-button type="danger" @click="dialogFormVisible = true">修改密码</el-button>
 
     <el-dialog title="修改密码" :visible.sync="dialogFormVisible">
@@ -40,7 +50,8 @@ export default {
                 currentPwd: '',
                 changePwd:''
             },
-            formLabelWidth: '100px'
+            formLabelWidth: '100px',
+            personalInformation: ''
         };
     },
     methods: {
@@ -50,7 +61,21 @@ export default {
                 type: 'success',
                 message: '修改密码成功'
             })
-        }
+        },
+        getInformation() {
+            this.personalInformation = JSON.parse(sessionStorage.getItem("userAllInfo"))
+            console.log("获取信息@@@@@@@",this.personalInformation);
+        },
+        getStatus(status) {
+            if (status === 1) {
+                return '正常'
+            } else if (status === 0) {
+                return '禁用'
+            }
+        },
+    },
+    mounted(){
+        this.getInformation();
     }
 }
 </script>

@@ -17,7 +17,7 @@
                 <div class="title">ACCOUNT LOGIN</div>
                 <el-form label-width="80px" :model="formLabelLogin">
                     <el-form-item label="账号">
-                        <el-input placeholder="请输入账号" v-model="formLabelLogin.accountnumber" clearable></el-input>
+                        <el-input placeholder="请输入账号" v-model="formLabelLogin.mobile" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
                         <el-input placeholder="请输入密码" v-model="formLabelLogin.password" type="password" clearable autocomplete="off"></el-input>
@@ -38,25 +38,68 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
     name: "Login",
     data() {
         return {
             checkList: ['记住密码', '记住账号'],
             formLabelLogin: {
-                accountnumber: '',
+                mobile: '',
                 password: '',
             },
+            urlAdress: 'http://192.168.43.43:8001'
         };
     },
     methods: {
+        // ...mapMutations("user", ["setUserInfo", "setUserAllInfo", "ISLOG", "CLOSE"]),
+         //登录
         login() {
-            if (this.formLabelLogin.accountnumber == 'admin' && this.formLabelLogin.password=='123456') {
-                this.$router.replace({
-                    path: "/index/PersonalCenter",
-                });
+            var param = {
+                mobile: this.formLabelLogin.mobile,
+                password: this.formLabelLogin.password
             }
-        }
+            this.$axios({
+                url: this.urlAdress+"/login",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(param),
+            })
+                .then((res) => {
+                    if (res.status == 200) {
+                        this.$message.success("登录成功！");
+                        //本地存储token
+                        sessionStorage.setItem("userInfo", JSON.stringify(res.data));
+                        // this.setUserInfo(res.data);
+                        // this.ISLOG();
+                        // this.CLOSE();
+                        //获取用户具体信息
+                        this.$axios({
+                            url: this.urlAdress + "/mscode-sys-user/queryUserInfo?token="+ res.data,
+                            method: "GET",
+                            // headers: { "Authorization": this.$store.state.user.userInfo.token },
+                        }).then((res) => {
+                            if (res.status == 200) {
+                                console.log("@@@@@@@",res.data);
+                                //本地存储用户信息
+                                sessionStorage.setItem("userAllInfo", JSON.stringify(res.data))
+                            }
+                        })
+                        .catch((e) => {
+                                this.$message.error(e);
+                        });
+
+                        this.$router.replace({
+                            path: "/index/Home",
+                        });
+                    }
+                })
+                .catch((e) => {
+                    this.$message.error(e);
+                });
+        },
     }
 }
 </script>
@@ -77,7 +120,7 @@ export default {
     -ms-flex: 0 0 200px;
     flex: 0 0 200px;
     background: #fff;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 
 .el-header .wrapper {

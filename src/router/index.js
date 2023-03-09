@@ -6,8 +6,12 @@ import PersonalCenter from '@/views/PersonalCenter'
 import Geology from '@/views/statistics/Geology'
 import Drilling from '@/views/statistics/Drilling'
 import Cementing from '@/views/statistics/Cementing'
-import Other from '@/views/statistics/Other'
 import Quality from '@/views/statistics/Quality'
+import Home from '@/views/Home'
+import headerNav from '../components/headerNav'
+import Basic from '@/views/acquisition/Basic'
+import Experiments from '@/views/acquisition/Experiments'
+import Process from '@/views/acquisition/Process'
 
 //配置路由
 const routes = [{
@@ -26,6 +30,14 @@ const routes = [{
         name: '首页',
         component: Index,
         children: [{
+                path: 'Home',
+                name: '首页',
+                meta: {
+                    title: '首页'
+                },
+                component: Home
+            },
+            {
                 path: 'PersonalCenter',
                 name: '个人中心',
                 meta: {
@@ -33,7 +45,7 @@ const routes = [{
                 },
                 component: PersonalCenter
             },
-            // 地质因素统计
+            // 影响因素
             {
                 path: 'statistics/Geology',
                 name: '地质因素统计',
@@ -59,19 +71,36 @@ const routes = [{
                 }
             },
             {
-                path: 'statistics/Other',
-                name: '其他因素统计',
-                component: Other,
-                meta: {
-                    title: '其他因素统计'
-                }
-            },
-            {
                 path: 'statistics/Quality',
                 name: '固井质量统计',
                 component: Quality,
                 meta: {
                     title: '固井质量统计'
+                }
+            },
+            //数据采集
+            {
+                path: 'acquisition/Basic',
+                name: '建井基础数据统计',
+                component: Basic,
+                meta: {
+                    title: '建井基础数据统计'
+                }
+            },
+            {
+                path: 'acquisition/Process',
+                name: '过程数据统计',
+                component: Process,
+                meta: {
+                    title: '过程数据统计'
+                }
+            },
+            {
+                path: 'acquisition/Experiments',
+                name: '实验检测数据统计',
+                component: Experiments,
+                meta: {
+                    title: '实验检测数据统计'
                 }
             },
         ]
